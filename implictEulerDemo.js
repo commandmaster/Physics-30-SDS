@@ -55,8 +55,6 @@ const demo = function(p) {
   }
 
   p.draw = function() {
-
-
     // scale based on the window width
     p.frameRate(framRateSlider.value());
     p.background(220);
@@ -105,6 +103,8 @@ const demo = function(p) {
     const displacement = p5.Vector.mult(startingVelocity, staringRunTime).add(p5.Vector.mult(p5.Vector.mult(startingAcceleration, 0.5), staringRunTime * staringRunTime));
     p.line(displacement.x, 0, displacement.x, p.height);  
 
+    p.textSize(10);
+
     p.noStroke();
     p.text(`Time left: ${runTime.toFixed(3)}s, Current Position: ${pos.x.toFixed(4)}m`, 0, -30);
 
@@ -117,7 +117,7 @@ const demo = function(p) {
   }
 
   p.windowResized = function() {
-    p.resizeCanvas(window.innerWidth/3, 200);
+    p.resizeCanvas(window.innerWidth/2, 200);
   }
 }
 

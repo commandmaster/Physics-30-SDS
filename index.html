@@ -27,6 +27,7 @@
 
   <body>
     <script src="implictEulerDemo.js"></script>
+    <script src="forceInteractionDemo.js"></script>
 
     <header>
       <h1>Computer-Simulated Rigidbody Dynamics</h1>
@@ -91,8 +92,25 @@
         Using the kinematic equations and comparing the results to the Semi-Implicit Euler method, we find that when simulating at low delta times we end up with very impressive results. 
       </p>
 
-
       <div id="sketch-holder"></div>
+
+      <p>
+        <b>Adding in forces <br></b>
+        When using numerical integration to solve for the motion of a rigid body the only parameters that we care about are the forces acting on our object and the mass of the object. 
+        Using both the mass and the force we can solve for the acceleration and then use the aforementioned methods to solve for the other properties of motion. 
+        $$\vec{F} = m \vec{a} \quad \quad \vec{a} = \frac{\vec{F}}{m}$$ Knowing this, we now have everything needed to work out what will happen every at every step of our simulation.
+
+        $$\vec{F} = \vec{F_g} + \vec{F_a} + \vec{F_N} + \vec{F_f}$$
+        $$\vec{a} = \frac{\vec{F}}{m}$$
+
+        $$\vec{v}_{n+1} = \vec{v}_n + \vec{a} \cdot \Delta t$$
+        $$\vec{d}_{n+1} = \vec{d}_n + \vec{v}_{n+1} \cdot \Delta t$$
+
+
+      </p>
+
+      <div id="force-interaction-holder"></div>
+
     </main>
 
     <footer>
