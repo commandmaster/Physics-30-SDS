@@ -38,6 +38,7 @@
     <script src="implictEulerDemo.js"></script>
     <script src="forceInteractionDemo.js"></script>
     <script src="collisionSolverDemo.js"></script>
+    <script type="module" src="physicsDemo.js"></script>
 
     <header>
       <h1>Computer-Simulated Rigidbody Dynamics</h1>
@@ -261,12 +262,17 @@ for(let i = 0; i < this.rigidbodies.length; i++) {
 }
         </code>
       </pre>
-      
 
       <div id="collision-solver-holder"></div>
     </p>
 
-        
+    <p> <b>Full Physics Engine</b> <br>
+      Using the above principles as well as some new algorithms, I have created a 2D physics engine that works with circles and any convex polygon. 
+      The physics engine also incorporates the angular component of the rigid bodies, allowing for rotation and a more accurate simulation. 
+      The engine also supports compound bodies linked with custom offsets from the center of mass. 
+
+      <div id="full-engine-holder"></div>
+    </p>    
 
     </main>
 
