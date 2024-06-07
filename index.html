@@ -37,6 +37,7 @@
   <body>
     <script src="implictEulerDemo.js"></script>
     <script src="forceInteractionDemo.js"></script>
+    <script src="collisionSolverDemo.js"></script>
 
     <header>
       <h1>Computer-Simulated Rigidbody Dynamics</h1>
@@ -110,7 +111,7 @@
         <b>Adding in forces <br></b>
         When using numerical integration to solve for the motion of a rigid body the only parameters that we care about are the forces acting on our object and the mass of the object. 
         Using both the mass and the force we can solve for the acceleration and then use the aforementioned methods to solve for the other properties of motion. 
-        $$\vec{F} = m \vec{a} \quad \quad \vec{a} = \frac{\vec{F}}{m}$$ Knowing this, we now have everything needed to work out what will happen every at every step of our simulation.
+        $$\vec{F} = m \vec{a} \quad \quad \vec{a} = \frac{\vec{F}}{m}$$ Knowing this, we now have everything needed to work out what will happen at every step of our simulation.
 
         $$\vec{F} = \vec{F_g} + \vec{F_a} + \vec{F_N} + \vec{F_f}$$
         $$\vec{a} = \frac{\vec{F}}{m}$$
@@ -186,12 +187,77 @@ class Rigidbody {
 
     <img src="images/Collision_response_rigid_impulse.png" alt="Two polygon rigid bodies colliding with each other with vector drawings displaying relavant information about the collision" class="center">
 
+    For simplicity let’s use circles for the rigid bodies, as they are by far the most simple to use when it comes to collision detection and resolution. 
+    The algorithm for detecting a collision is fairly simple. You loop through each pair of rigid bodies in the simulation and check if the distance between them is less than the sum of their radii. 
+    If that is the case then the rigid bodies are overlapping.
+
+    $$ \sqrt{(b_{1x} + b_{2x})^2 + (b_{1y} + b_{2y})^2} \leq (r_1 + r_2) $$
+
+    Once we determine that two bodies are colliding we can resolve that collision. To resolve the collision, we need to use our knowledge of the classical laws for momentum.
+
+    $$ \vec{P}_{tot} = \vec{P}'_{tot}, \quad n = \text{number of bodies} \rightarrow \vec{P}_{tot} = \sum_{i=1}^{n} \vec{P}_i \text{ and } \vec{P} = m \vec{v} $$
+    These laws are the foundation for a popular collision resolution method called the Impulse Method. 
+
+    This method involves directly modifying the velocities of objects using an impulse along the collision normal. 
+    The Impulse Method uses the coefficient of restitution (e) to determine the overall momentum conservation of the system, with 1 being no momentum lost and 0 being no momentum conserved. 
+    The derivation for this equation is complicated and beyond the scope of this SDS, however here is the equation taken from this <a href="https://research.ncl.ac.uk/game/mastersdegree/gametechnologies/physicstutorials/5collisionresponse/Physics%20-%20Collision%20Response.pdf">research paper</a> (ignoring the angular components):
+    $$ \vec{v}_r = (\vec{v}_1 - \vec{v}_2) \rightarrow J = \frac{-(1 + e) \vec{v}_r \cdot \hat{n}}{\frac{1}{m_1} + \frac{1}{m_2}} $$
+
+      <pre style="width: 100%;">
+        <code class="language-javascript">
+class CollisionSolver{
+    constructor(simulation) {
+        this.simulation = simulation;
+    }
+
+    resolveCollisions() {
+        // Resolve all collisions (circle to circle)
+
+        for (let i = 0; i < this.simulation.rigidbodies.length; i++) {
+            for (let j = i + 1; j < this.simulation.rigidbodies.length; j++) {
+                let rb1 = this.simulation.rigidbodies[i];
+                let rb2 = this.simulation.rigidbodies[j];
+
+                let distance = p5.Vector.sub(rb1.position, rb2.position).mag();
+
+                if (distance < rb1.radius + rb2.radius) {
+                    // They are colliding
+                    let normal = p5.Vector.sub(rb1.position, rb2.position).normalize(); // Normal vector pointing from rb2 to rb1
+                    let relativeVelocity = p5.Vector.sub(rb1.velocity, rb2.velocity); // Relative velocity of rb1 to rb2
+
+                    const collisionOfRestitution = 1; // Perfectly elastic collision
+                    let impulse = p5.Vector.mult(normal, p5.Vector.dot(normal, relativeVelocity) * (1 + collisionOfRestitution) / (1 / rb1.mass + 1 / rb2.mass));
+
+                    rb1.velocity.sub(p5.Vector.div(impulse, rb1.mass)); // Subtract impulse from velocity of the first object
+                    rb2.velocity.add(p5.Vector.div(impulse, rb2.mass)); // Add impulse to velocity of the second object
+
+                    // Move the objects out of each other
+                    let overlap = (rb1.radius + rb2.radius) - distance;
+                    let correction = p5.Vector.mult(normal, overlap / (1 / rb1.mass + 1 / rb2.mass));
+
+                    rb1.position.add(p5.Vector.div(correction, rb1.mass));
+                    rb2.position.sub(p5.Vector.div(correction, rb2.mass));
+                }
+            }
+        }
+    }
+}
+        </code>
+      </pre>
+
+      <div id="collision-solver-holder"></div>
     </p>
+
+        
 
     </main>
 
     <footer>
-      <p>&copy; 2024 Computer-Simulated Rigidbody Dynamics - Bennett Friesen</p>
+      <p>
+        &copy; 2024 Computer-Simulated Rigidbody Dynamics <br>
+        Bennett Friesen <br>
+        <a href="https://github.com/commandmaster/Physics-30-SDS">Code (Github Repo)</a> <br>
+      </p>
     </footer>
 
   </body>
