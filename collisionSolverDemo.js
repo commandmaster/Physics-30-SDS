@@ -1,12 +1,12 @@
-
+let restitutionSlider;
 const collisionSolverDemo = function(p) {
-  let simulation;
-
-
+    let simulation;
   p.setup = function() {
     const mainDivWidth = document.getElementsByTagName('main')[0].getBoundingClientRect().width;
     const canvas = p.createCanvas(mainDivWidth, 600);
     canvas.parent('collision-solver-holder');
+
+
 
     simulation = new NewSimulation(p, 300);
     
@@ -26,6 +26,33 @@ const collisionSolverDemo = function(p) {
     addRigidbodyButton.style('color', 'black');
     addRigidbodyButton.style('background-color', 'rgb(220, 220, 220)');
     addRigidbodyButton.style('border', 'none');
+
+    const spiceThingsUp = p.createButton('Spice Things Up');
+    spiceThingsUp.parent('collision-solver-holder');
+    spiceThingsUp.size(150, 30);
+    spiceThingsUp.style('padding', '0px');
+    spiceThingsUp.style('color', 'black');
+    spiceThingsUp.style('background-color', 'rgb(220, 220, 220)');
+    spiceThingsUp.style('border', 'none');
+    spiceThingsUp.style('margin-left', '10px');
+
+    spiceThingsUp.mousePressed(() => {
+        for(let i = 0; i < simulation.rigidbodies.length; i++) {
+            let rb = simulation.rigidbodies[i];
+            rb.applyImpulse(p.createVector(p.random(-400, 400), p.random(-500, -200)), 1);
+        }
+    });
+
+
+    const restitutionSliderLabel = p.createP('Coefficient of Restitution: ');
+    restitutionSliderLabel.parent('collision-solver-holder');
+    restitutionSliderLabel.style('margin-top', '5px');
+
+    restitutionSlider = p.createSlider(0, 1, 1, 0.01);
+    restitutionSlider.parent(restitutionSliderLabel);
+
+    
+
 
     addRigidbodyButton.mousePressed(() => {
         const rb = new NewRigidbody(p, 1, p.createVector(p.random(0, p.width), p.random(0, p.height)), p.createVector(p.random(-100, 100), p.random(-100, 100)), p.createVector(0, 0), 10);
@@ -77,12 +104,12 @@ class NewSimulation{
 
         if (rb.position.x < 0 + rb.radius || rb.position.x > this.p.width - rb.radius) {
             rb.position.x = this.p.constrain(rb.position.x, rb.radius, this.p.width - rb.radius);
-            rb.velocity.x *= -1;
+            rb.velocity.x *= -1 * restitutionSlider.value();
         }
 
         if (rb.position.y < 0 + rb.radius || rb.position.y > this.p.height - rb.radius) {
             rb.position.y = this.p.constrain(rb.position.y, rb.radius, this.p.height - rb.radius);
-            rb.velocity.y *= -1;
+            rb.velocity.y *= -1 * restitutionSlider.value();
         }
 
         this.totalSimulationEnergy += (0.5 * rb.mass * rb.velocity.magSq()) + (this.gravityStrength * rb.mass * -(rb.position.y - this.p.height));
@@ -157,7 +184,7 @@ class CollisionSolver{
                     let normal = p5.Vector.sub(rb1.position, rb2.position).normalize(); // Normal vector pointing from rb2 to rb1
                     let relativeVelocity = p5.Vector.sub(rb1.velocity, rb2.velocity); // Relative velocity of rb1 to rb2
 
-                    const collisionOfRestitution = 1; // Perfectly elastic collision
+                    const collisionOfRestitution = restitutionSlider.value(); // Coefficient of restitution
                     let impulse = p5.Vector.mult(normal, p5.Vector.dot(normal, relativeVelocity) * (1 + collisionOfRestitution) / (1 / rb1.mass + 1 / rb2.mass));
 
                     rb1.velocity.sub(p5.Vector.div(impulse, rb1.mass)); // Subtract impulse from velocity of the first object
