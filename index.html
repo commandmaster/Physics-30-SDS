@@ -23,6 +23,15 @@
     <script src="libraries/p5.sound.min.js"></script>
     <script src="https://polyfill.io/v3/polyfill.min.js?features=es6"></script>
     <script id="MathJax-script" async src="https://cdn.jsdelivr.net/npm/mathjax@3/es5/tex-mml-chtml.js"></script>
+
+    <link rel="stylesheet" href="https://unpkg.com/@highlightjs/cdn-assets@11.7.0/styles/github-dark.min.css"/>
+
+    <script src="https://cdnjs.cloudflare.com/ajax/libs/highlight.js/11.9.0/highlight.min.js"></script>
+
+    <!-- and it's easy to individually load additional languages -->
+    
+
+    <script>hljs.highlightAll();</script>
   </head>
 
   <body>
@@ -81,7 +90,7 @@
         physics simulations use the Implicit Method, such as Unity (a popular game development engine). The first step 
         in the Implicit Euler method is to take the current velocity and add to it the acceleration multiplied by the 
         delta time. \( \vec{v}_{n+1} = \vec{v}_n + \vec{a} \cdot \Delta t \) To find the new position we take the new 
-        velocity, multiply by the delta time, and add it to the current position. \( \vec{d}_{n+1} = \vec{d}_n + \vec{v}_{n+1} \cdot \Delta t \) The method becomes more accurate as t approaches 0. In an ideal world, we could 
+        velocity, multiply by the delta time, and add it to the current position. \( \vec{d}_{n+1} = \vec{d}_n + \vec{v}_{n+1} \cdot \Delta t \) The method becomes more accurate as \( \Delta t \) approaches 0. In an ideal world, we could 
         simulate thousands of times every second to receive the most accurate results possible, unfortunately, this is 
         not possible in real life and we will have to settle with 60 simulation steps per second.
       </p>
@@ -115,6 +124,69 @@
         <div id="force-interaction-holder"></div>
       </figure>
       
+    <p> <b>Impulses and Collisions</b> <br>
+      Up to this point, we have some code that allows us to create a rigid body, and using the Implicit Euler Method we can move it around and apply gravity. 
+
+      <pre style="width: 100%;">
+        <code class="language-javascript">
+// I'm using a js library for the vectors, called p5js
+class Simulation{
+  constructor(gravityStrength = 9.8) {
+    // This array contains all the rigidbodies in the simulation
+    this.rigidbodies = []; 
+
+    // This is the strength of the gravity in the simulation
+    this.gravityStrength = gravityStrength; 
+  }
+
+  addRigidbody(rigidbody) {
+    // This function adds a rigidbody "object" to the simulation
+    this.rigidbodies.push(rigidbody);
+  }
+
+  stepSimulation(dt) {
+    // This function steps the simulation forward by dt seconds
+    // It applies gravity to all the rigidbodies and then steps them forward in time
+
+    for(let i = 0; i < this.rigidbodies.length; i++) {
+      let rb = this.rigidbodies[i];
+      rb.applyForce(this.p.createVector(0, this.gravityStrength * rb.mass));
+      rb.stepSimulation(dt);
+    } 
+  }
+}
+
+class Rigidbody {
+  constructor(mass, position, velocity, radius) {
+    this.mass = mass;
+    this.position = position;
+    this.velocity = velocity;
+    this.acceleration = 0; 
+    this.radius = radius;
+  }
+
+  stepSimulation(dt) {
+    // This function steps the rigidbody forward by dt seconds
+    this.velocity.add(p5.Vector.mult(this.acceleration, dt)); // Implicit Euler Method
+    this.position.add(p5.Vector.mult(this.velocity, dt)); // Implicit Euler Method
+
+    this.acceleration.mult(0); // Reset the acceleration every step
+  }
+
+  applyForce(force) {
+    // This function applies a force to the rigidbody in Newtons
+    this.acceleration.add(p5.Vector.div(force, this.mass));
+  }
+}
+    </code></pre> 
+
+    As of now, the rigid bodies are isolated from their environment. This means they cannot interact with other rigid bodies or any external forces or constraints. 
+    To create a more realistic simulation, it's necessary to allow interactions between rigid bodies and their environment. This leads us to our next step for the simulation, collisions. 
+    To create a collision in a physics simulation you need to know if two rigid bodies are colliding, each rigid body’s momentum, and the normal vector between the two during the collision.
+
+    <img src="images/Collision_response_rigid_impulse.png" alt="Two polygon rigid bodies colliding with each other with vector drawings displaying relavant information about the collision" class="center">
+
+    </p>
 
     </main>
 

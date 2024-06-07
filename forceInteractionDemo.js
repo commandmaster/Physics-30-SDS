@@ -7,11 +7,12 @@ const forceInteractionDemo = function(p) {
   
 
   p.setup = function() {
-    const canvas = p.createCanvas(window.innerWidth, 600);
+    const mainDivWidth = document.getElementsByTagName('main')[0].getBoundingClientRect().width;
+    const canvas = p.createCanvas(mainDivWidth, 600);
     canvas.parent('force-interaction-holder');
 
     simulation = new Simulation(p, 50);
-    rb1 = new Rigidbody(1, p.createVector(100, 100), p.createVector(0, 0), p.createVector(0, 0), 10);
+    rb1 = new Rigidbody(p, 1, p.createVector(100, 100), p.createVector(0, 0), p.createVector(0, 0), 10);
     simulation.addRigidbody(rb1);
 
     const gravityLabel = p.createP('Gravity: ');
@@ -61,7 +62,8 @@ const forceInteractionDemo = function(p) {
   }
 
   p.windowResized = function() {
-    p.resizeCanvas(window.innerWidth, 600);
+    const mainDivWidth = document.getElementsByTagName('main')[0].getBoundingClientRect().width;
+    p.resizeCanvas(mainDivWidth, 600);
   }
 
 }
@@ -106,15 +108,19 @@ class Simulation{
 }
 
 class Rigidbody {
-  constructor(mass, position, velocity, acceleration, radius) {
+  constructor(p, mass, position, velocity, acceleration, radius) {
+    this.p = p;
     this.mass = mass;
     this.position = position;
     this.velocity = velocity;
     this.acceleration = acceleration;
     this.radius = radius;
+
   }
 
   stepSimulation(dt) {
+    dt = Math.min(dt, 1);
+
     this.velocity.add(p5.Vector.mult(this.acceleration, dt));
     this.position.add(p5.Vector.mult(this.velocity, dt));
 
@@ -128,8 +134,8 @@ class Rigidbody {
       this.velocity.y *= -1;
     }
 
-    if (this.position.x + this.radius > window.innerWidth) {
-      this.position.x = window.innerWidth - this.radius;
+    if (this.position.x + this.radius > this.p.width) {
+      this.position.x = this.p.width - this.radius;
       this.velocity.x *= -1;
     }
 

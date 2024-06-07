@@ -13,7 +13,9 @@ const demo = function(p) {
 
   p.setup = function() {
     // create the canvas attached to the div with id 'sketch-holder'
-    let canvas = p.createCanvas(window.innerWidth, 200 );
+    const mainDivWidth = document.getElementsByTagName('main')[0].getBoundingClientRect().width;
+
+    let canvas = p.createCanvas(mainDivWidth, 200 );
     canvas.parent('sketch-holder');
 
     // Show the values of the sliders
@@ -117,7 +119,8 @@ const demo = function(p) {
   }
 
   p.windowResized = function() {
-    p.resizeCanvas(window.innerWidth, 200);
+    const mainDivWidth = document.getElementsByTagName('main')[0].getBoundingClientRect().width;
+    p.resizeCanvas(mainDivWidth, 200);
   }
 }
 
