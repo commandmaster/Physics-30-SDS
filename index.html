@@ -1,0 +1,103 @@
+<!DOCTYPE html>
+<html lang="en">
+  <head>
+    <meta charset="utf-8" />
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+
+    <title>Computer-Simulated Rigidbody Dynamics</title>
+
+    <link rel="stylesheet" href="https://cdn.simplecss.org/simple.css">
+    <link rel="stylesheet" type="text/css" href="style.css">
+
+    <!-- Linking to the main p5.js library, which allows your code to use all 
+       p5 functions. Using this version while developing your code allows p5 
+       to provide more Friendly Error Messages if you mess something up...-->
+    <script src="libraries/p5.js"></script>
+
+    <!-- Once your project is working completely, you can comment out the link
+       to p5.js above, and instead link to this minified version. The minified
+       version takes less space, and turns off Friendly Error Messages. This 
+       increases the speed of your program quite dramatically in some cases.-->
+    <!-- <script src="libraries/p5.min.js"></script> -->
+
+    <script src="libraries/p5.sound.min.js"></script>
+    <script src="https://polyfill.io/v3/polyfill.min.js?features=es6"></script>
+    <script id="MathJax-script" async src="https://cdn.jsdelivr.net/npm/mathjax@3/es5/tex-mml-chtml.js"></script>
+  </head>
+
+  <body>
+    <script src="implictEulerDemo.js"></script>
+
+    <header>
+      <h1>Computer-Simulated Rigidbody Dynamics</h1>
+    </header>
+    
+    <main>
+      <p>
+        <b>Focus Question:</b> <br>
+        How do computer simulations simulate the motion and interaction of rigid bodies in two dimensions?
+        How do forces, kinematics, energy, and momentum influence the behavior of these bodies?
+      </p>
+
+      <p>
+        <b>Physics Simulations</b> <br>
+        In today’s world, we are surrounded by computers and technology. These computers can perform a multitude 
+        of different tasks, some of which include connecting people across the world, displaying movies, managing 
+        financial transactions, and even controlling complex machinery. One of the common applications of the 
+        modern computer is its ability to simulate the real world; whether it's sending a rocket to the moon or 
+        playing a first-person shooter video game, physics simulations play a crucial role. Physics simulations 
+        allow us to predict real-world events, saving money and resources that would otherwise be necessary. In 
+        my self-directed study, I plan to explore a specific area of computer-simulated physics: rigid body dynamics. 
+        Rigid body dynamics is, by definition, the behavior of bodies as they move and interact with each other 
+        and their environment.
+      </p>
+
+      <p>
+        <b>What is a rigid body?</b> <br>
+        A rigid body is an idealized physical object that does not deform under external forces, maintaining its 
+        shape, size, and internal structure. While no real-world object is perfectly rigid, simulating a rigid body 
+        requires much less computation power and simplifies the complexity of a true-to-world simulation. In the 
+        simulations I will be observing and creating, I will assume that every physical object is a rigid body.
+      </p>
+
+      <p>
+        <b>How might you create a simulation using a computer?</b> <br>
+        A computer takes an input, and using the given instructions, it returns an output. Unfortunately, computers 
+        cannot understand human languages such as English or French. Instructions given to computers must be in binary. 
+        Binary is a system of information encoding using bits; each bit represents a state, either 1 (on) or 0 (off). 
+        Over the years, engineers have been able to improve the process of writing computer code. Instead of having to 
+        manually write 0s and 1s, we can now write code in more human-like languages. The code is then translated or 
+        compiled into machine code (binary). There are hundreds of coding languages one can choose from, I will be 
+        using a mix of javascript and sudo-code (a mix of English and code).
+      </p>
+
+      <p>
+        <b>Euler Integration</b> <br>
+        The most popular method for integrating force into the other equations for motion is the Implicit Euler Method. 
+        This method uses numerical integration to find the solution for the next step in time. As opposed to using an 
+        analytical approach, a numerical approach saves computation time but comes with inherent error. The Implicit 
+        Euler Method is more accurate than the Explicit Euler Method, which is why most commercial applications of 
+        physics simulations use the Implicit Method, such as Unity (a popular game development engine). The first step 
+        in the Implicit Euler method is to take the current velocity and add to it the acceleration multiplied by the 
+        delta time. \( \vec{v}_{n+1} = \vec{v}_n + \vec{a} \cdot \Delta t \) To find the new position we take the new 
+        velocity, multiply by the delta time, and add it to the current position. \( \vec{d}_{n+1} = \vec{d}_n + \vec{v}_{n+1} \cdot \Delta t \) The method becomes more accurate as t approaches 0. In an ideal world, we could 
+        simulate thousands of times every second to receive the most accurate results possible, unfortunately, this is 
+        not possible in real life and we will have to settle with 60 simulation steps per second.
+      </p>
+
+      <p>
+        <b>Comparing the kinematic equations to the Semi-Implicit Euler Method</b> <br>
+        As I mentioned before in the section on Euler Integration there will be errors when using any of the various numerical integration techniques (some more than others). 
+        Using the kinematic equations and comparing the results to the Semi-Implicit Euler method, we find that when simulating at low delta times we end up with very impressive results. 
+      </p>
+
+
+      <div id="sketch-holder"></div>
+    </main>
+
+    <footer>
+      <p>&copy; 2024 Computer-Simulated Rigidbody Dynamics - Bennett Friesen</p>
+    </footer>
+
+  </body>
+</html>
