@@ -57,6 +57,8 @@ class NewSimulation{
     this.gravityStrength = gravityStrength;
 
     this.collisionSolver = new CollisionSolver(this);
+    this.totalSimulationMomentum = 0;
+    this.totalSimulationEnergy = 0;
   }
 
   addRigidbody(rigidbody) {
@@ -65,6 +67,8 @@ class NewSimulation{
 
   stepSimulation(dt) {
     this.collisionSolver.resolveCollisions();
+    this.totalSimulationMomentum = 0;
+    this.totalSimulationEnergy = 0;
 
     for(let i = 0; i < this.rigidbodies.length; i++) {
         let rb = this.rigidbodies[i];
@@ -80,10 +84,17 @@ class NewSimulation{
             rb.position.y = this.p.constrain(rb.position.y, rb.radius, this.p.height - rb.radius);
             rb.velocity.y *= -1;
         }
+
+        this.totalSimulationEnergy += (0.5 * rb.mass * rb.velocity.magSq()) + (this.gravityStrength * rb.mass * -(rb.position.y - this.p.height));
+        this.totalSimulationMomentum += rb.velocity.mag() * rb.mass;
     } 
   }
 
   draw(p) {
+    p.fill(0);
+    p.textSize(20);
+    p.text(`Total Momentum: ${this.totalSimulationMomentum.toFixed(2)} Wu (Ns)`, 10, 30);
+    p.text(`Total Energy: ${this.totalSimulationEnergy.toFixed(2)} J`, 10, 60);
 
     for(let i = 0; i < this.rigidbodies.length; i++) {
         let rb = this.rigidbodies[i];

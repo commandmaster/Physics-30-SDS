@@ -203,6 +203,7 @@ class Rigidbody {
     The derivation for this equation is complicated and beyond the scope of this SDS, however here is the equation taken from this <a href="https://research.ncl.ac.uk/game/mastersdegree/gametechnologies/physicstutorials/5collisionresponse/Physics%20-%20Collision%20Response.pdf">research paper</a> (ignoring the angular components):
     $$ \vec{v}_r = (\vec{v}_1 - \vec{v}_2) \rightarrow J = \frac{-(1 + e) \vec{v}_r \cdot \hat{n}}{\frac{1}{m_1} + \frac{1}{m_2}} $$
 
+    <b>Collision Resolution Code</b> <br>
       <pre style="width: 100%;">
         <code class="language-javascript">
 class CollisionSolver{
@@ -244,6 +245,23 @@ class CollisionSolver{
 }
         </code>
       </pre>
+
+      <b>Energy Calculation Code</b> <br>
+      <pre style="width: 100%;">
+        <code class="language-javascript"> 
+// Calculate the total energy and momentum of the simulation
+// Run in the stepSimulation() function in the Simulation class
+let totalSimulationEnergy = 0;
+let totalSimulationMomentum = 0;
+
+for(let i = 0; i < this.rigidbodies.length; i++) {
+  let rb = this.rigidbodies[i];
+  totalSimulationEnergy += (0.5 * rb.mass * rb.velocity.magSq()) + (this.gravityStrength * rb.mass * -(rb.position.y - this.p.height));
+  totalSimulationMomentum += rb.velocity.mag() * rb.mass;
+}
+        </code>
+      </pre>
+      
 
       <div id="collision-solver-holder"></div>
     </p>
