@@ -496,11 +496,13 @@ class ConvexCollider{
         this.#calculateWorldPosition(); // Calculate the world position of the collider
         this.#calculateVertices(); // Calculate the vertices of the collider
 
-        this.boundingBox = this.#precomputeBoundingBox(); // Bounding box of the collider
-        //this.boundingBox = new BoundingBox(this.#position, 0, 0); // Bounding box of the collider
+        this.boundingBox = new BoundingBox(this.#position, 0, 0); // Temporary bounding box before it is calculated after the first refresh 
+
         this.refresh(); // Refresh the collider (calculate the world position and vertices
 
         this.type = 'convex'; // Type of the collider
+
+        this.boundingBox = this.#precomputeBoundingBox(); // Bounding box of the collider
     }
 
     addVertex(vertex){
@@ -615,7 +617,7 @@ class ConvexCollider{
         this.rotation = this.rigidBody.rotation; // Set the rotation of the collider to the rotation of the rigidbody
         this.#calculateWorldPosition(); // Calculate the world position of the collider
         this.#calculateVertices(); // Calculate the vertices of the collider
-        
+        //this.boundingBox = this.#precomputeBoundingBox(); // Calculate the bounding box of the collider 
         this.#calculateBoundingBox(); // Calculate the bounding box of the collider
     }
 
@@ -690,7 +692,7 @@ class CircleCollider{
 
 class Rigidbody{
     #velocity = new Vec2(0, 0); // Linear velocity
-    #acceleration = new Vec2(0, 70); // Linear acceleration
+    #acceleration = new Vec2(0, 120); // Linear acceleration
     #angularVelocity = 0; // Angular velocity
     #angularAcceleration = 0; // Angular acceleration
     #angularDrag = 0.001; // Angular drag
@@ -701,7 +703,7 @@ class Rigidbody{
     #bounce = 0.5; // Coefficient of restitution (bounciness) of the rigidbody
     #angularCollisionDamping = 0.1; // Angular collision damping
     #colliders = []; // Colliders attached to the rigidbody
-    #inertiaTensor = 80000; // Inertia tensor of the rigidbody
+    #inertiaTensor = 100000; // Inertia tensor of the rigidbody
     #centerOfMass = new Vec2(0, 0); // Center of mass of the rigidbody
 
     #actingForces = []; // Forces acting on the rigidbody
@@ -1139,7 +1141,7 @@ class SAT{
         // Ignore colliders not in bounds 
 
         // There is a error with the calculation of the bounding box 
-        //if (AABB.checkCollision(collider1.boundingBox, collider2.boundingBox) === false) return false; // Return false if there is no overlap
+        if (AABB.checkCollision(collider1.boundingBox, collider2.boundingBox) === false) return false; // Return false if there is no overlap
 
 
         const axes1 = SAT.getAxes(collider1); // Get the axes of the first collider to test against
