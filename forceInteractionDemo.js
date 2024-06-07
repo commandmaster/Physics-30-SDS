@@ -7,7 +7,7 @@ const forceInteractionDemo = function(p) {
   
 
   p.setup = function() {
-    const canvas = p.createCanvas(window.innerWidth/2, 600);
+    const canvas = p.createCanvas(window.innerWidth, 600);
     canvas.parent('force-interaction-holder');
 
     simulation = new Simulation(p, 50);
@@ -61,7 +61,7 @@ const forceInteractionDemo = function(p) {
   }
 
   p.windowResized = function() {
-    p.resizeCanvas(window.innerWidth/2, 600);
+    p.resizeCanvas(window.innerWidth, 600);
   }
 
 }
@@ -128,8 +128,8 @@ class Rigidbody {
       this.velocity.y *= -1;
     }
 
-    if (this.position.x + this.radius > window.innerWidth/2) {
-      this.position.x = window.innerWidth/2 - this.radius;
+    if (this.position.x + this.radius > window.innerWidth) {
+      this.position.x = window.innerWidth - this.radius;
       this.velocity.x *= -1;
     }
 
