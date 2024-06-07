@@ -3,26 +3,29 @@ import * as Physics from './physicsEngine.js';
 let Vec2 = Physics.Vec2;
 let Rigidbody = Physics.Rigidbody;
 let PhysicsEngine = Physics.PhysicsEngine;
+let RectangleCollider = Physics.RectangleCollider;
+let CircleCollider = Physics.CircleCollider;
+let TriangleCollider = Physics.TriangleCollider;
 
 const fullEngineDemo = function(p) {
     let engine = new Physics.PhysicsEngine(50)
-    let rb1 = new Rigidbody(new Vec2(100, 100), 0, 1, 1, []);
-    let collider = new Physics.CircleCollider(rb1, 0, 0, 1, 10);
-    rb1.addCollider(collider);
+    // setup test senario
+    const rigidBody1 = new Rigidbody(new Vec2(100, 100), 0, 1, 1, []);
+    const rigidBody2 = new Rigidbody(new Vec2(300, -100), 0, 1, 1, []);
+    const rigidBody3 = new Rigidbody(new Vec2(200, 300), 0, 1, 1, []);
 
-    let rb2 = new Rigidbody(new Vec2(200, 200), 0, 1, 1, []);
-    let collider2 = new Physics.CircleCollider(rb2, 0, 0, 1, 10);
-    rb2.addCollider(collider2);
 
-    let floor = new Rigidbody(new Vec2(0, 500), 0, 1, 0, []);
-    let floorCollider = new Physics.RectangleCollider(floor, 0, 200, 0, 1, 500, 100);
-    
-    floor.isStatic = true;
-    floor.addCollider(floorCollider);
+    rigidBody1.addCollider(new RectangleCollider(rigidBody1, 0, 0, 35, 1, 100, 100));
+    rigidBody1.addCollider(new CircleCollider(rigidBody1, 50, 0, 1, 20));
 
-    engine.addRigidbody(rb1);
-    engine.addRigidbody(rb2);
-    engine.addRigidbody(floor);
+   
+
+    const ground = new Rigidbody(new Vec2(300, 400), Math.PI/7, Infinity, 1, []);
+    ground.addCollider(new RectangleCollider(ground, 0, 0, 0, 1, 500, 100));
+
+    engine.addRigidbody(rigidBody1);
+    engine.addRigidbody(ground);
+
 
   p.setup = function() {
     const mainDivWidth = document.getElementsByTagName('main')[0].getBoundingClientRect().width;
@@ -45,24 +48,17 @@ const fullEngineDemo = function(p) {
         }
 
         if (collider instanceof Physics.ConvexCollider) {
-            // ctx.beginPath();
-            // ctx.strokeStyle = 'grey';
-            // ctx.moveTo(collider.vertices[0].x, collider.vertices[0].y);
-            // for (let i = 1; i < collider.vertices.length; i++){
-            //     ctx.lineTo(collider.vertices[i].x, collider.vertices[i].y);
-            // }
-            // ctx.lineTo(collider.vertices[0].x, collider.vertices[0].y);
-            // ctx.stroke();
-            // ctx.closePath();
+            let ctx = p.drawingContext;
 
-            p.beginShape();
-            p.stroke(0);
-            p.strokeWeight(1);
-            p.fill(200);
-            for (let i = 0; i < collider.vertices.length; i++) {
-              p.vertex(collider.vertices[i].x, collider.vertices[i].y);
+            ctx.beginPath();
+            ctx.strokeStyle = 'grey';
+            ctx.moveTo(collider.vertices[0].x, collider.vertices[0].y);
+            for (let i = 1; i < collider.vertices.length; i++){
+                ctx.lineTo(collider.vertices[i].x, collider.vertices[i].y);
             }
-            p.endShape(p.CLOSE);
+            ctx.lineTo(collider.vertices[0].x, collider.vertices[0].y);
+            ctx.stroke();
+            ctx.closePath();
         }
       }
     }

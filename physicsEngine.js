@@ -390,22 +390,6 @@ class Vec2{
 
     /**
      * 
-     * @param {Vec2} v The vector to lerp towards 
-     * @param {Number} t The interpolation value 
-     * @returns {Vec2} This vector after interpolation 
-     * @memberof Vec2 
-     * @description Linearly interpolate this vector towards another vector 
-     */
-    lerpTowards(v, t){
-        // Linearly interpolate this vector towards another vector
-        this.#x = this.#x + (v.x - this.#x) * t;
-        this.#y = this.#y + (v.y - this.#y) * t;
-
-        return this;
-    }
-
-    /**
-     * 
      * @returns {Vec2} A clone/copy of this vector
      * @memberof Vec2
      * @description Create a clone/copy of this vector
@@ -428,20 +412,6 @@ class Vec2{
         const y = Number(this.#y.toFixed(precision)); // Round the y value to the specified precision
         return {x, y};
     }
-
-    /**
-     * 
-     * @param {Number} [precision=2] The number of decimal places to round the values to 
-     * @returns {Object} The serialized version of this vector
-     * @memberof Vec2
-     * @description Serialize this vector to a object with a a specified number of decimal places for the x and y values
-     */
-    toFixed(precision){
-        // Alias method for serialize
-
-        // Serialize this vector
-        return this.serialize(precision);
-    }   
 
     #calculateMag(){
         // Pythagorean theorem to calculate the magnitude of the vector
@@ -1167,7 +1137,9 @@ class SAT{
     // Separating Axis Theorem - Used for collision detection between convex shapes - Theory learned at https://dyn4j.org/2010/01/sat/
     static checkPolyToPoly(collider1, collider2, debug=false){
         // Ignore colliders not in bounds 
-        if (AABB.checkCollision(collider1.boundingBox, collider2.boundingBox) === false) return false; // Return false if there is no overlap
+
+        // There is a error with the calculation of the bounding box 
+        //if (AABB.checkCollision(collider1.boundingBox, collider2.boundingBox) === false) return false; // Return false if there is no overlap
 
 
         const axes1 = SAT.getAxes(collider1); // Get the axes of the first collider to test against
@@ -1585,20 +1557,6 @@ class PhysicsEngine{
         this.rigidBodies.push(rigidbody);
     }
 
-    /**
-     * @param {Rigidbody} rigidbody The rigidbody to delete from the physics engine
-     * @description Deletes a rigidbody from the physics engine
-     * @returns {void}
-     * @method
-     * @public
-     */
-    deleteRigidbody(rigidbody){
-        const index = this.rigidBodies.indexOf(rigidbody);
-        if (index !== -1){
-            this.rigidBodies.splice(index, 1);
-        }
-    }
-
     //#region Collision Handling
     #checkAllCollisions(){
         for (let i = 0; i < this.rigidBodies.length; i++){
@@ -1696,3 +1654,4 @@ class PhysicsEngine{
 }
 
 export {PhysicsEngine, Vec2, BoundingBox, CircleCollider, RectangleCollider, TriangleCollider, ConvexCollider, Rigidbody};
+
