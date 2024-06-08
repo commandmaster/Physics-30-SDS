@@ -38,6 +38,7 @@
     <script src="implictEulerDemo.js"></script>
     <script src="forceInteractionDemo.js"></script>
     <script src="collisionSolverDemo.js"></script>
+    <script type="module" src="poolDemo.js"></script>
     <script type="module" src="physicsDemo.js"></script>
 
     <header>
@@ -201,7 +202,7 @@ class Rigidbody {
 
     This method involves directly modifying the velocities of objects using an impulse along the collision normal. 
     The Impulse Method uses the coefficient of restitution (e) to determine the overall momentum conservation of the system, with 1 being no momentum lost and 0 being no momentum conserved. 
-    The derivation for this equation is complicated and beyond the scope of this SDS, however here is the equation taken from this <a href="https://research.ncl.ac.uk/game/mastersdegree/gametechnologies/physicstutorials/5collisionresponse/Physics%20-%20Collision%20Response.pdf">research paper</a> (ignoring the angular components):
+    The derivation for this equation is complicated and beyond the scope of this SDS, however here is the equation taken from this <a target="_blank" rel="noopener noreferrer" href="https://research.ncl.ac.uk/game/mastersdegree/gametechnologies/physicstutorials/5collisionresponse/Physics%20-%20Collision%20Response.pdf">research paper</a> (ignoring the angular components):
     $$ \vec{v}_r = (\vec{v}_1 - \vec{v}_2) \rightarrow J = \frac{-(1 + e) \vec{v}_r \cdot \hat{n}}{\frac{1}{m_1} + \frac{1}{m_2}} $$
 
     <b>Collision Resolution Code</b> <br>
@@ -270,8 +271,17 @@ for(let i = 0; i < this.rigidbodies.length; i++) {
       Using the above principles as well as some new algorithms, I have created a 2D physics engine that works with circles and any convex polygon. 
       The physics engine also incorporates the angular component of the rigid bodies, allowing for rotation and a more accurate simulation. 
       The engine also supports compound bodies linked with custom offsets from the center of mass. 
+      Some notable algorithms and formulae I used include the point segment distance formula, the separating axis theorem, 
+      the axis-aligned bounding box (AABB) collision detection algorithm, the line-to-line intersection formula, 
+      and the point-polygon intersection algorithm. The full engine code and its documentation are available on my <a target="_blank" rel="noopener noreferrer" href="https://commandmaster.github.io/PhysEngine2D">GitHub</a>
 
       <div id="full-engine-holder"></div>
+
+    <br>
+    <b>Pool Using The Complete Engine</b> <br>
+    Use the Spacebar to shoot the cue ball toward the mouse pointer. 
+    The cue ball will collide with the other balls and the walls of the pool table.
+      <div id="pool-demo-holder"></div>
     </p>    
 
     </main>
@@ -280,7 +290,7 @@ for(let i = 0; i < this.rigidbodies.length; i++) {
       <p>
         &copy; 2024 Computer-Simulated Rigidbody Dynamics <br>
         Bennett Friesen <br>
-        <a href="https://github.com/commandmaster/Physics-30-SDS">Code (Github Repo)</a> <br>
+        <a target="_blank" rel="noopener noreferrer" href="https://github.com/commandmaster/Physics-30-SDS">Code (Github Repo)</a> <br>
       </p>
     </footer>
 
