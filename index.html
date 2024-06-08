@@ -46,6 +46,8 @@
     </header>
     
     <main>
+      <section>
+      
       <p>
         <b>Focus Question:</b> <br>
         How do computer simulations simulate the motion and interaction of rigid bodies in two dimensions?
@@ -83,6 +85,7 @@
         compiled into machine code (binary). There are hundreds of coding languages one can choose from, I will be 
         using a mix of javascript and sudo-code (a mix of English and code).
       </p>
+    </section>   
 
       <p>
         <b>Euler Integration</b> <br>
@@ -101,12 +104,12 @@
       <p>
         <b>Comparing the kinematic equations to the Semi-Implicit Euler Method</b> <br>
         As I mentioned before in the section on Euler Integration there will be errors when using any of the various numerical integration techniques (some more than others). 
-        Using the kinematic equations and comparing the results to the Semi-Implicit Euler method, we find that when simulating at low delta times we end up with very impressive results. 
+        Using the kinematic equations and comparing the results to the Semi-Implicit Euler method, 
+        we find that when simulating at low delta times we end up with very impressive results. 
       </p>
-
-      <figure>
-        <div id="sketch-holder"></div>
-      </figure>
+      
+      
+      <div id="sketch-holder"></div>
       
 
       <p>
@@ -283,6 +286,34 @@ for(let i = 0; i < this.rigidbodies.length; i++) {
     The cue ball will collide with the other balls and the walls of the pool table.
       <div id="pool-demo-holder"></div>
     </p>    
+
+    <p>
+      <b>Conclusion</b> <br>
+      The study of rigid body dynamics is a very interesting field of physics. The principles of kinematics, forces, energy, and momentum are crucial to understanding the behavior and the accurate prediction of rigid bodies in a computer simulation. 
+      The Implicit Euler Method is a great mix of performance and accuracy, allowing for quite accurate predictions of motion. 
+      The creation of a physics engine is no easy task, requiring a well-versed understanding of both physics and mathematics. 
+      The engine I have created is capable of simulating the motion and interaction of rigid bodies in two dimensions, providing a realistic representation of a physical system (In 2D). 
+      I have learned a great deal about physics simulations and computer programming through this self-directed study, and, in the future, I look forward to exploring more advanced topics such as 3D simulations.
+    </p>
+
+    <p>
+      <b>Sources</b> <br>
+      Baraff, D. (n.d.). Physics: Collision response. Newcastle University. https://research.ncl.ac.uk/game/mastersdegree/gametechnologies/physicstutorials/5collisionresponse/Physics%20-%20Collision%20Response.pdf <br> <br>
+
+      Bittle, W. (2010, January 1). SAT (Separating Axis Theorem). dyn4j. https://dyn4j.org/2010/01/sat <br> <br>
+
+      Edgar Programmator. (2023, August 31). Find the intersection of two line segments in 2D (Easy Method) [Video]. YouTube. https://www.youtube.com/watch?v=bvlIYX9cgls <br> <br>
+
+      Engineering Made Easy. (2019, February 9). Numerical Analysis - Backward Euler Method [Video]. YouTube. https://www.youtube.com/watch?v=cdUpAuGTIfE <br> <br>
+
+      Integration Basics | Gaffer on Games. (2004, June 1). Gaffer on Games. https://gafferongames.com/post/integration_basics/ <br> <br>
+
+      Souto, N. (2015, January 22). Video Game Physics Tutorial - Part I: An Introduction to Rigid Body Dynamics. Toptal Engineering Blog. https://www.toptal.com/game/video-game-physics-part-i-an-introduction-to-rigid-body-dynamics <br> <br>
+
+      Two-Bit Coding. (2022, August 6). Contact points (Polygon/Polygon)- Let’s make a physics engine [20] [Video]. YouTube. https://www.youtube.com/watch?v=5gDC1GU3Ivg <br> <br>
+
+
+    </p>
 
     </main>
 

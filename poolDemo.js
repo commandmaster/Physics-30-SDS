@@ -12,6 +12,7 @@ const poolDemo = function(p) {
     let queueBall = new Rigidbody(new Vec2(-150, 0), 0, 1, 1, []);
     queueBall.addCollider(new CircleCollider(queueBall, 0, 0, 1, 15));
     queueBall.acceleration = new Vec2(0, 0);
+    queueBall.linearDrag = 0.009;
 
     engine.addRigidbody(queueBall);
 
@@ -122,23 +123,6 @@ const poolDemo = function(p) {
 
         // debug the walls 
         p.fill(0);
-        // for (let i = 0; i < walls.colliders.length; i++) {
-        //     let collider = walls.colliders[i];
-        //     console.log(collider);
-        //     if (collider instanceof Physics.ConvexCollider) {
-        //         const vertices = collider.vertices;
-        //         p.beginShape();
-        //         for (let j = 0; j < vertices.length; j++) {
-        //             p.vertex(vertices[j].x, vertices[j].y);
-        //         }
-        //         p.endShape(p.CLOSE);
-
-        //     } else if (collider instanceof CircleCollider) {
-        //         p.ellipse(collider.position.x, collider.position.y, collider.radius*2);
-        //     }
-        // }
-
-        //  
     }
 
     p.windowResized = function() {
@@ -156,6 +140,8 @@ const poolDemo = function(p) {
                 new Vec2(90, -45), new Vec2(90, -15), new Vec2(90, 15), new Vec2(90, 45),
                 new Vec2(120, -60), new Vec2(120, -30), new Vec2(120, 0), new Vec2(120, 30), new Vec2(120, 60)
             ]; 
+
+        let green = Math.floor(Math.random() * 256);
         for (let i = 0; i < 15; i++) {
             // Spawn balls in a triangle formation
             let position = positions[i];
@@ -164,9 +150,10 @@ const poolDemo = function(p) {
             
             newRB.acceleration = new Vec2(0, 0);
             newRB.addCollider(new CircleCollider(newRB, 0, 0, 1, 15));
+            newRB.linearDrag = 0.005;
             engine.addRigidbody(newRB);  
 
-            newRB.color = {r: Math.random() * 255, g: Math.random() * 255, b: Math.random() * 255};
+            newRB.color = {r: i * 12, g: green, b: 255 - i * 12};
 
             ballsToDraw.push(newRB);
         }

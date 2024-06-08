@@ -922,6 +922,14 @@ class Rigidbody{
         return this.#angularCollisionDamping;
     }
 
+    get linearDrag(){
+        return this.#linearDrag;
+    }
+
+    set linearDrag(value){
+        this.#linearDrag = value;
+    }
+
  
 }
 

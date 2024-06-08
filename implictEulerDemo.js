@@ -11,6 +11,8 @@ const demo = function(p) {
   let staringRunTime = 3;
   let runTime = staringRunTime;
 
+  let lastError = 0;
+
   p.setup = function() {
     // create the canvas attached to the div with id 'sketch-holder'
     const mainDivWidth = document.getElementsByTagName('main')[0].getBoundingClientRect().width;
@@ -65,10 +67,13 @@ const demo = function(p) {
     p.translate(20, p.height / 2);
 
     
-    p.scale(window.innerWidth / 800, window.innerWidth / 800);
+    p.scale(p.width / 350, p.width / 350);
     // live implict euler integration example
 
     if (runTime <= 0.001) {
+      lastError = pos.x - (velocity.x * staringRunTime - 0.5 * acceleration.x * staringRunTime * staringRunTime);
+      lastError = Math.abs(lastError);
+
       runTime = staringRunTime;
       pos = p.createVector(0, 0);
       velocity = p.createVector(velSlider.value(), 0);
@@ -108,10 +113,13 @@ const demo = function(p) {
     p.textSize(10);
 
     p.noStroke();
-    p.text(`Time left: ${runTime.toFixed(3)}s, Current Position: ${pos.x.toFixed(4)}m`, 0, -30);
+    p.text(`Time left: ${runTime.toFixed(3)}s, Current Position: ${pos.x.toFixed(4)}m`, 0, -35);
 
     p.fill(0, 0, 255);
-    p.text(`Kinematic Prediction: ${displacement.x.toFixed(4)}m`, 0, -20);
+    p.text(`Kinematic Prediction: ${displacement.x.toFixed(4)}m,  Delta Time: ${(1/p.frameRate()).toFixed(4)}s`, 0, -25);
+
+    p.fill(255, 0, 0);  
+    p.text(`Last Error: ${lastError.toFixed(4)}m, ${((lastError / displacement.x) * 100).toFixed(3)}%`, 0, -15);
 
     p.pop();
 
